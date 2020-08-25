@@ -13,13 +13,26 @@ const INGREDIENT_PRICES = {
 const BurgerBuilder = () => {
 	const [state, setState] = useState({
 		ingredients: {
-			salad: 1,
-			bacon: 1,
-			cheese: 2,
-			meat: 2,
+			salad: 0,
+			bacon: 0,
+			cheese: 0,
+			meat: 0,
 		},
-		totalPrice: 4,
+		totalPrice: 0,
+		purchaseable: false,
 	});
+
+	const updatePurchaseState = (ingredients) => {
+		const sum = Object.keys(ingredients)
+			.map((igKey) => {
+				return ingredients[igKey];
+			})
+			.reduce((sum, el) => {
+				return sum + el;
+			}, 0);
+
+		setState((ingredients) => ({ ...ingredients, purchaseable: sum > 0 }));
+	};
 
 	const addIngredientHandler = (type) => {
 		const oldCount = state.ingredients[type];
@@ -32,7 +45,11 @@ const BurgerBuilder = () => {
 		const oldPrice = state.totalPrice;
 		const newPrice = oldPrice + priceAddition;
 
-		setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+		setState({
+			totalPrice: newPrice,
+			ingredients: updatedIngredients,
+		});
+		updatePurchaseState(updatedIngredients);
 	};
 
 	const removeIngredientHandler = (type) => {
@@ -46,7 +63,11 @@ const BurgerBuilder = () => {
 		const oldPrice = state.totalPrice;
 		const newPrice = oldPrice - priceDeduction;
 
-		setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+		setState({
+			totalPrice: newPrice,
+			ingredients: updatedIngredients,
+		});
+		updatePurchaseState(updatedIngredients);
 	};
 
 	const disabledInfo = {
@@ -72,6 +93,8 @@ const BurgerBuilder = () => {
 				disable={disabledInfo}
 				maximum={maxInfo}
 				price={INGREDIENT_PRICES}
+				totalPrice={state.totalPrice}
+				purchaseable={state.purchaseable}
 			/>
 		</Aux>
 	);
