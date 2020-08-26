@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
 	salad: 1.5,
@@ -20,6 +22,7 @@ const BurgerBuilder = () => {
 		},
 		totalPrice: 0,
 		purchaseable: false,
+		purchasing: false,
 	});
 
 	const updatePurchaseState = (ingredients) => {
@@ -84,8 +87,15 @@ const BurgerBuilder = () => {
 		maxInfo[key] = maxInfo[key] >= 5;
 	}
 
+	const purchaseHandler = () => {
+		setState(() => ({ ...state, purchasing: true }));
+	};
+
 	return (
 		<Aux>
+			<Modal show={state.purchasing}>
+				<OrderSummary ingredients={state.ingredients} />
+			</Modal>
 			<Burger ingredients={state.ingredients} />
 			<BuildControls
 				ingredientAdded={addIngredientHandler}
@@ -95,6 +105,7 @@ const BurgerBuilder = () => {
 				price={INGREDIENT_PRICES}
 				totalPrice={state.totalPrice}
 				purchaseable={state.purchaseable}
+				order={purchaseHandler}
 			/>
 		</Aux>
 	);
