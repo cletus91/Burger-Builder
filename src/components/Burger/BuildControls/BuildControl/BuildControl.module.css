@@ -51,10 +51,12 @@
 .BuildControl .Less:active {
 	background-color: #daa972;
 	color: white;
+	cursor: url('../../../../assets/icons/sad.png'), auto;
 }
 
 .BuildControl .More:hover,
 .BuildControl .More:active {
 	background-color: #99703f;
 	color: white;
+	cursor: url('../../../../assets/icons/yummy.png'), auto;
 }

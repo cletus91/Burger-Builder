@@ -91,10 +91,19 @@ const BurgerBuilder = () => {
 		setState(() => ({ ...state, purchasing: true }));
 	};
 
+	const closeHandler = () => {
+		setState(() => ({ ...state, purchasing: false }));
+	};
+
 	return (
 		<Aux>
-			<Modal show={state.purchasing}>
-				<OrderSummary ingredients={state.ingredients} />
+			<Modal show={state.purchasing} modalClosed={closeHandler}>
+				<OrderSummary
+					ingredients={state.ingredients}
+					totalPrice={state.totalPrice}
+					closed={closeHandler}
+					continue={closeHandler}
+				/>
 			</Modal>
 			<Burger ingredients={state.ingredients} />
 			<BuildControls
