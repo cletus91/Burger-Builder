@@ -8,7 +8,9 @@ import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
-const BurgerBuilder = () => {
+const BurgerBuilder = (props) => {
+	console.log(props);
+
 	const INGREDIENT_PRICES = {
 		salad: 1.5,
 		bacon: 2,
@@ -100,24 +102,36 @@ const BurgerBuilder = () => {
 	};
 
 	const continueHandler = () => {
-		setState(() => ({
-			...state,
-			loading: true,
-		}));
-		const order = {
-			ingredients: state.ingredients,
-			price: state.totalPrice,
-			customer: {
-				name: 'Cletus',
-				address: '100 Main St',
-				zip: '00000',
-			},
-			email: 'burger123@burger.com',
-		};
-		axios
-			.post('/orders.json', order)
-			.then((response) => setState(() => ({ ...state, loading: true, purchasing: false })))
-			.catch((error) => setState(() => ({ ...state, loading: true, purchasing: false })));
+		// 	setState(() => ({
+		// 		...state,
+		// 		loading: true,
+		// 	}));
+		// 	const order = {
+		// 		ingredients: state.ingredients,
+		// 		price: state.totalPrice,
+		// 		customer: {
+		// 			name: 'Cletus',
+		// 			address: '100 Main St',
+		// 			zip: '00000',
+		// 		},
+		// 		email: 'burger123@burger.com',
+		// 	};
+		// 	axios
+		// 		.post('/orders.json', order)
+		// 		.then((response) => setState(() => ({ ...state, loading: true, purchasing: false })))
+		// 		.catch((error) => setState(() => ({ ...state, loading: true, purchasing: false })));
+		const queryParams = [];
+		for (let i in state.ingredients) {
+			queryParams.push(
+				encodeURIComponent(i) + '=' + encodeURIComponent(state.ingredients[i])
+			);
+		}
+		const queryString = queryParams.join('&');
+
+		props.history.push({
+			pathname: '/checkout',
+			search: '?' + queryString,
+		});
 	};
 
 	let orderSummary = null;
