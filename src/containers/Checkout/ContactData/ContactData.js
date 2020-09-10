@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import Button from '../../../../components/UI/Button/Button';
-import Spinner from '../../../../components/UI/Spinner/Spinner';
+import axios from '../../../axios-orders';
+import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 import { withRouter } from 'react-router-dom';
 import classes from './ContactData.module.css';
 
@@ -33,7 +33,7 @@ const ContactData = (props) => {
 			email: state.email,
 		};
 		axios
-			.post('https://burger-builder-64110.firebaseio.com/orders.json', order)
+			.post('/orders.json', order)
 			.then((response) => {
 				setState(() => ({ ...state, loading: true }));
 				props.history.push('/');
